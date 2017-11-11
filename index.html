@@ -1,16 +1,82 @@
 <!DOCTYPE html>
 <html>
   <head>
+		<link rel="stylesheet" href="css/photon.min.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+		      rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>IoT Controller</title>
+<style>
+.label{
+  font-size: 20px;
+}
+.content{
+  padding-top:10%;
+}
+.iconStuff{
+	display: flex;
+}
+</style>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-
+    <script>
+    function callAPI(payload){
+      var request = require('request');
+      request({
+        url: "http://73.78.132.90:5000/",
+        method: "POST",
+        json: true,   // <--Very important!!!
+        body: payload
+    }, function (error, response, body){
+        console.log(response);
+});
+    }
+    function lightsON(){
+      var payload = {
+      'hue' : {
+          'group' : 'fan',
+          'on' : 'True'
+          }
+      };
+      callAPI(payload);
+    }
+    function lightsOFF(){
+    var payload = {
+      'hue' : {
+          'group' : 'fan',
+          'on' : 'False'
+          }
+      };
+      callAPI(payload);
+    }
+    </script>
+    <div class="window">
+      <div class="window-content">
+        <div class="pane-group">
+          <div class="pane-sm sidebar">
+            <nav class="nav-group">
+              <h5 class="nav-group-title">Control</h5>
+              <a class="iconStuff nav-group-item active">
+                <i class="material-icons">lightbulb_outline</i>
+                Light Control
+              </a>
+            </nav>
+            </nav>
+          </div>
+          <div class="pane">
+            <div class="content">
+  						<center>
+  						<p class="label">Livingroom Light Controls:</p>
+  						</center>
+              <center>
+                <button onclick="lightsON()" class="btn btn-large btn-default">Turn On</button>
+    						<button onclick="lightsOFF()" class="btn btn-large btn-default">Turn Off</button>
+            </center>
+  					</div>
+          </div>
+          </div>
+      </div>
+    </div>
     <script>
       // You can also require other files to run in this process
       require('./renderer.js')
